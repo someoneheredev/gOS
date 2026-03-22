@@ -1,0 +1,87 @@
+Open Watcom Linker Version 2.0 beta Sep  1 2025 02:43:11 (32-bit)
+Copyright (c) 2002-2025 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
+Created on:       26/03/22 14:40:16
+Executable Image: /home/someonehere/Documents/SomeonehereOS/build/stage2.bin
+creating a RAW Binary Image executable
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+DGROUP                          000000a6             00000014
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+_ENTRY                 CODE           AUTO           00000000        00000026
+_TEXT                  CODE           AUTO           00000026        00000080
+CONST                  DATA           DGROUP         000000a6        00000014
+CONST2                 DATA           DGROUP         000000ba        00000000
+_DATA                  DATA           DGROUP         000000ba        00000000
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: /home/someonehere/Documents/SomeonehereOS/build/stage2/asm/main.obj(main.asm)
+00000000       entry
+Module: /home/someonehere/Documents/SomeonehereOS/build/stage2/asm/x86.obj(x86.asm)
+00000013       _x86_Video_WriteCharTeletype
+Module: /home/someonehere/Documents/SomeonehereOS/build/stage2/c/main.obj(/home/someonehere/Documents/SomeonehereOS/src/bootloader/stage2/main.c)
+00000026       _cstart_
+Module: /home/someonehere/Documents/SomeonehereOS/build/stage2/c/stdio.obj(/home/someonehere/Documents/SomeonehereOS/src/bootloader/stage2/stdio.c)
+0000004d+      _putchar_
+0000006b       puts_
+
+
+                        +---------------------+
+                        |   Module Segments   |
+                        +---------------------+
+
+! = 32-bit segment
+c = initialized communal data
+
+Module          Segment               Class           Address         Size
+======          =======               =====           =======         ====
+
+main.asm        _ENTRY                CODE           00000000         00000013
+x86.asm         _ENTRY                CODE           00000013         00000013
+/home/someonehere/Documents/SomeonehereOS/src/bootloader/stage2/main.c
+                _TEXT                 CODE           00000026         00000027
+                CONST                 DATA           000000a6         00000014
+                CONST2                DATA           000000ba         00000000
+                _DATA                 DATA           000000ba         00000000
+/home/someonehere/Documents/SomeonehereOS/src/bootloader/stage2/stdio.c
+                _TEXT                 CODE           0000004d         00000059
+                CONST                 DATA           000000ba         00000000
+                CONST2                DATA           000000ba         00000000
+                _DATA                 DATA           000000ba         00000000
+Warning! W1014: stack segment not found
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  0200 (512.)
+Memory size:  00ba (186.)
+Entry point address: 00000000
+Link time: 00:00.00

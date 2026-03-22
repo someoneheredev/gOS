@@ -1,6 +1,6 @@
 bits 16
 
-section _ENTRY class=Code
+section _ENTRY class=CODE
 
 extern _cstart_
 global entry
@@ -16,7 +16,7 @@ entry:
 	; expect boot drive in dl, send it as arguemnt to start
 	xor dh, dh
 	push dx
-	call_cstart_
+	call _cstart_
 
 	cli
 	hlt
