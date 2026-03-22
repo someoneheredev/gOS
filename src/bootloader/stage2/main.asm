@@ -1,48 +1,22 @@
-org 0x0
 bits 16
 
+section _ENTRY class=Code
 
-%define ENDL 0x0D, 0x0A
+extern _cstart_
+global entry
 
-start:
-	; print message
-	mov si, msg_hello
-	call puts
+entry:
+	cli
+	mov ax, ds
+	mov ss, ax
+	mov sp, 0
+	mov bp, sp
+	sti
 
-.halt:
+	; expect boot drive in dl, send it as arguemnt to start
+	xor dh, dh
+	push dx
+	call_cstart_
+
 	cli
 	hlt
-
-
-;
-; Prints a string to the screen
-; Params:
-; - ds:si points to a string
-
-puts:
-	; save registers we are going to modify
-	push si
-	push ax
-	push bx
-
-.loop:
-	lodsb ; loads next character in al
-	or al, al ; verify if next character is null
-	jz .done
-
-	mov ah, 0x0E ; call bios interrupt
-	mov bh, 0
-	int 0x10
-
-	jmp .loop
-
-.done:
-	pop bx
-	pop ax
-	pop si
-	ret
-
-
-
-
-msg_hello: db 'Hello world from KERNEL!', ENDL, 0
