@@ -38,36 +38,6 @@ ebr_system_id:				db 'FAT12   '
 ;
 
 start:
-	jmp main
-
-
-;
-; Prints a string to the screen
-; Params:
-; - ds:si points to a string
-
-puts:
-	; save registers we are going to modify
-	push si
-	push ax
-
-.loop:
-	lodsb ; loads next character in al
-	or al, al ; verify if next character is null
-	jz .done
-
-	mov ah, 0x0e ; call bios interrupt
-	mov bh, 0
-	int 0x10
-
-	jmp .loop
-
-.done:
-	pop ax
-	pop si
-	ret
-
-main:
 	; setup data segments
 	mov ax, 0
 	mov ds, ax
@@ -77,16 +47,17 @@ main:
 	mov ss, ax
 	mov sp, 0x7C00 			; stack grows downwards from where we are loaded in memory
 
+	push es ; some gay bios will start at somthing else
+	push word .after
+	retf
+
+.after:
+
 	; read something from floppy disk
 	; bios should set dl to drive number
 	mov [ebr_drive_number], dl
 
-	mov ax, 1				; lba=1, second sector from disk
-	mov cl, 1 				; 1 sector to read
-	mov bx, 0x7E00			; data should be after bootloader
-	call disk_read
-
-	; print message
+	; show loading message
 	mov si, msg_hello
 	call puts
 
@@ -115,6 +86,33 @@ wait_key_and_reboot:
 	cli						; disable interrupts
 	hlt
 
+
+
+;
+; Prints a string to the screen
+; Params:
+; - ds:si points to a string
+
+puts:
+	; save registers we are going to modify
+	push si
+	push ax
+
+.loop:
+	lodsb ; loads next character in al
+	or al, al ; verify if next character is null
+	jz .done
+
+	mov ah, 0x0e ; call bios interrupt
+	mov bh, 0
+	int 0x10
+
+	jmp .loop
+
+.done:
+	pop ax
+	pop si
+	ret
 
 ;
 ; Disk Routines
@@ -220,7 +218,7 @@ disk_reset:
 	popa
 	ret
 
-msg_hello: db 'Hello world!', ENDL, 0
+msg_hello: db 'gOS Loading...', ENDL, 0
 msg_read_failed: db 'Failed to read floppy disk!', ENDL, 0
 
 times 510-($-$$) db 0
